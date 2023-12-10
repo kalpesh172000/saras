@@ -1,0 +1,65 @@
+<!DOCTYPE html> 
+<html lang="en"> 
+	<head> 
+        <title>Saras</title>
+    <meta charset="UTF-8" /> 
+    <meta name="viewport"
+        content="width=device-width, 
+                initial-scale=0.1" /> 
+    <link href="index.css" rel="stylesheet">
+	</head> 
+	<body> 
+        <center>
+        <div class="container">
+            <div class="row">
+				<br><br><br>
+                <label class="animate-charcter">SARAS</label>
+            </div>
+        </div>
+		<br>
+		<h1 class="subtitle">An Innovative Heart</h1>
+		</center>
+		<section> 
+			<div id="background-wrap">
+                <div class="bubble x1"></div>
+                <div class="bubble x2"></div>
+                <div class="bubble x3"></div>
+                <div class="bubble x4"></div>
+                <div class="bubble x5"></div>
+                <div class="bubble x6"></div>
+                <div class="bubble x7"></div>
+                <div class="bubble x8"></div>
+                <div class="bubble x9"></div>
+                <div class="bubble x10"></div>
+            </div>
+		</section> 
+		<br><br><br><br><br><br><br>
+		<center>
+		<button class="glow-on-hover" id="register" type="button" onclick="window.location.href = 'login.html';"><h3>Login</h3></button>
+		<button class="glow-on-hover" id="login" type="button" onclick="window.location.href = 'register.html';"><h3>Register</h3></button>
+		</center>  
+		<script type="text/javascript"> 
+			/*Bubble*/
+			function createBubble() { 
+				const section = 
+					document.querySelector("Section"); 
+				const createElement = 
+					document.createElement("span"); 
+				var size = Math.random() * 60; 
+
+				createElement.style.animation = 
+				"animation 6s linear infinite"; 
+				createElement.style.width = 180 + size + "px"; 
+				createElement.style.height = 180 + size + "px"; 
+				createElement.style.left = 
+				Math.random() * innerWidth + "px"; 
+				section.appendChild(createElement); 
+
+				setTimeout(() => { 
+					createElement.remove(); 
+				}, 4000); 
+			} 
+			setInterval(createBubble, 100); 
+		</script> 
+	</body> 
+</html> 
