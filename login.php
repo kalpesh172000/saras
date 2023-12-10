@@ -2,8 +2,8 @@
 session_start();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $db_host = 'localhost';
-    $db_user = 'muskan';
-    $db_password = 'saras123';
+    $db_user = 'root';
+    $db_password = '';
     $db_name = 'saras';
 
     $conn = new mysqli($db_host, $db_user, $db_password, $db_name);

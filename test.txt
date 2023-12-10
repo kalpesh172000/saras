@@ -1,0 +1,9 @@
+create table users (
+    username varchar(100) primary key,
+    full_name varchar(100) not null,
+    email varchar(100) not null unique,
+    phone_number bigint(10) not null,
+    password varchar(50) not null,
+    gender varchar(20) not null
+);
+
