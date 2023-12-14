@@ -6,7 +6,7 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
-  <link href="new_craft.css" rel="stylesheet">
+  <link href="../css/new_craft.css" rel="stylesheet">
 </head>
 <body>
 <form action="upload.php" method="post" enctype="multipart/form-data">

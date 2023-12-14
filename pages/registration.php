@@ -4,13 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Saras Register</title>
-    <link rel="stylesheet" href="login_register.css">
+    <link rel="stylesheet" href="../css/login_register.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
     <?php
     if (isset($_POST['submit'])) {
+
+
+
+
+
         session_start(); 
         $_SESSION['regiErr'] = ""; 
         $db_host = 'localhost';
