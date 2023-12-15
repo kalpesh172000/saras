@@ -10,8 +10,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         $usernameErr = "";
         $username = input_data($_POST["uname"]);
-        if (!preg_match("/^[a-zA-Z0-9]*$/", $username)) {
-            $usernameErr = "Only a-z, A-Z, and 0-9 are allowed.";
+        if (!preg_match("/^[a-zA-Z0-9#@_]*$/", $username)) {
+            $usernameErr = "Only a-z, A-Z,0-9,#,@,_ are allowed.";
         }
     }
 

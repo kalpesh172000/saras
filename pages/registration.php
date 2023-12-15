@@ -58,16 +58,23 @@
             if (!preg_match("/^[a-zA-Z0-9#@_]*$/", $username)) {
                 // Invalid username
                 $usernameErr = "Username should only contain a-z,A-Z,0-9,#,@,_";
-            } else if (!preg_match("/^{8,0}$/",$username))
-            {
-                //Invalid username
-                $usernameErr = "Username should be atleast 8 character in length";
             }
             else
             {
                 $usernameErr = "";
             }
+            if (!preg_match("/^.{8,}$/",$username))
+            {
+                //Invalid username
+                $usernameErr = $usernameErr . "Username should be atleast 8 character in length";
+            }
+            else
+            {
+                $usernameErr = $usernameErr . "";
+            }
         }
+
+
         if(empty($_POST['email']))
         {
             $emailErr = "Email is required";
@@ -84,16 +91,18 @@
             }
         }
         
+
         if(empty($_POST['pno']))
         {
             $phoneErr = "Phone number is required";
         }
         else 
         {
-            $pno = input_data($_POST['name']);
-            if (!preg_match("/^[0-9]{10,10}$/", $pno)) {
-                // Invalid phone  number
-                $phoneErr = "Phone number should contain exact 10 digits";
+            $phoneErr = "";
+            $pno = input_data($_POST['pno']);
+            if (!preg_match("/^[0-9]{10}$/", $pno)) {
+                // Invalid phone number
+                $phoneErr = "Phone number should contain exactly 10 digits";
             } else {
                 //valid number
                 $phoneErr = "";
