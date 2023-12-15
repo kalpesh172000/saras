@@ -51,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if (password_verify($password, $row["password"])) {
                 session_start();
                 $_SESSION['logged_user'] = $username;
-                header("Location: test.php");
+                header("Location: main.php");
                 exit;
             } else {
                 echo "<form><h3>Incorrect Password</h3></form>";
