@@ -139,6 +139,10 @@
         {
             $genderErr = "gender is required";
         }
+        else
+        {
+            $genderErr = "";
+        }
         
         if($fullNameErr == "" && $usernameErr ==  "" && $phoneErr == "" && $emailErr == "" && $passwordErr == "" && $passwordMatchErr == "" && $genderErr == "")
         {
