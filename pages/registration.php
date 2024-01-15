@@ -12,231 +12,63 @@
 		}
 	</style>
 </head>
-
 <body>
-    <?php
-    
-    function input_data($data)
-	{
-		$data = trim($data);
-		$data = stripslashes($data);
-		$data = htmlspecialchars($data);
-		return $data;
-	}
-
-
-    if (isset($_POST['submit'])) {
-        $fullNameErr = $usernameErr = $emailErr = $passwordErr = $phoneErr = $passwordMatchErr = $genderErr = $databaseErr = "";
-        $name = $username = $email = $pno = $pass1 = $pass2 = $gender = $hashed_password = "";
-
-        if(empty($_POST['name']))
-        {
-            $fullNameErr = "full name is required";
-        }
-        else 
-        {
-            $name = input_data($_POST['name']);
-            if (!preg_match("/^[a-zA-Z ]{1,}$/", $name)) 
-            {
-			    $fullNameErr = "Only alphabets are allowed in name";
-		    }
-            else
-            {
-                $name = strtolower($name);
-                $fullNameErr = "";
-            }
-        }
-        
-        if(empty($_POST['uname']))
-        {
-            $usernameErr = "username is required";
-        }
-        else 
-        {
-            $usernameErr = "";
-            $username = input_data($_POST['uname']);
-            if (!preg_match("/^[a-zA-Z0-9#@_]*$/", $username)) {
-                // Invalid username
-                $usernameErr = "Username should only contain a-z,A-Z,0-9,#,@,_";
-            }
-            else
-            {
-                $usernameErr = "";
-            }
-            if (!preg_match("/^.{8,}$/",$username))
-            {
-                //Invalid username
-                $usernameErr = $usernameErr . "Username should be atleast 8 character in length";
-            }
-            else
-            {
-                $usernameErr = $usernameErr . "";
-            }
-        }
-
-
-        if(empty($_POST['email']))
-        {
-            $emailErr = "Email is required";
-        }
-        else 
-        {
-            $email = input_data($_POST['email']);
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                // Invalid Email
-                $emailErr = "Invalid Email";
-            } else {
-                //Valid Email
-                $emailErr = "";
-            }
-        }
-        
-
-        if(empty($_POST['pno']))
-        {
-            $phoneErr = "Phone number is required";
-        }
-        else 
-        {
-            $phoneErr = "";
-            $pno = input_data($_POST['pno']);
-            if (!preg_match("/^[0-9]{10}$/", $pno)) {
-                // Invalid phone number
-                $phoneErr = "Phone number should contain exactly 10 digits";
-            } else {
-                //valid number
-                $phoneErr = "";
-            }
-        }
-
-        if(empty($_POST['ps1']) || empty($_POST['ps2']))
-        {
-            $passwordErr = "both password fields are required";
-        }
-        else 
-        {
-            $pass1 = input_data($_POST['ps1']);
-            $pass2 = input_data($_POST['ps2']);
-            if($pass1 != $pass2)
-            {
-                $passwordMatchErr = "passwords didn't match with each other";
-            }
-            else
-            {
-                $passwordMatchErr = "";
-            }
-            if (!preg_match("/^[a-zA-Z0-9#@_]{8,}$/", $pass1)) {
-                // Invalid password
-                $passwordErr = "Password should only contain a-z,A-Z,0-9,#,@,_";
-                $passwordMatchErr = "";
-            } else {
-                //valid Password
-                $passwordErr = "";
-            }
-        }
-
-        if(empty($_POST['gender']))
-        {
-            $genderErr = "gender is required";
-        }
-        else
-        {
-            $genderErr = "";
-        }
-        
-        if($fullNameErr == "" && $usernameErr ==  "" && $phoneErr == "" && $emailErr == "" && $passwordErr == "" && $passwordMatchErr == "" && $genderErr == "")
-        {
-            $_SESSION['regiErr'] = ""; 
-            $db_host = 'localhost';
-            $db_user = 'root';
-            $db_password = '';
-            $db_name = 'saras';
-
-            $conn = new mysqli($db_host, $db_user, $db_password, $db_name);
-
-            if ($conn->connect_error) {
-                die("Connection failed: " . $conn->connect_error);
-            }
-
-            //hashing the password for extra protection 
-            $hashed_password = password_hash($pass2, PASSWORD_DEFAULT);
-
-            if ($pass1 == $pass2) {
-
-                $sql = "INSERT INTO users (full_name, username, email, phone_number, password, gender) VALUES (?,?,?,?,?,?)";
-                $result = $conn->prepare($sql);
-                $result->bind_param("sssdss", $name, $username, $email, $pno, $hashed_password, $gender);
-
-                try {
-                    $result->execute();
-                    if ($result->affected_rows == 1) {
-                        echo "helowro";
-                        $databaseErr = "";
-                        $_SESSION['registration_success'] = true;
-                        $conn->close();
-                        header("Location: login.html");
-                        exit; // Add an exit to stop further script execution
-                    }
-                    else
-                    {
-                        $databaseErr = "username/email is already taken";
-                    }
-                } catch (Exception $e) {
-                    echo "hellow"; 
-                    $databaseErr = "username/email is already taken";
-                }
-            }
-            $conn ->close();
-        }
-
-        
-    }
-    ?>
     <div class="container">
         <div class="title">Register</div>
         <div class="content">
-            <form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
+            <form id='myform' onsubmit="return validateForm()" method="POST" action="register_validate.php">
                 <br><br>
-                <!-- ... (Previous HTML content) ... -->
-
-                <!-- ... (Remaining HTML content) ... -->
                 <div class="user-details">
                     <div class="input-box">
                         <span class="details">Full Name</span>
-                        <input type="text" name="name" placeholder="Enter your name" required>
-                        <span class="error"><?php echo $fullNameErr; ?> </span>
+                        <input type="text" id='name' name="name" placeholder="Enter your name" required>
+                        <span class="error" id="fullNameErr"><?php 
+                        session_name("register");
+                        session_start();
+                        
+                        if (isset($_SESSION['header_redirect_flag']) && $_SESSION['header_redirect_flag'] === true) {
+                        } else {
+                            // Page loaded in a normal way
+                            // Destroy and restart the session
+                            session_destroy();
+                            session_start();
+                        }
+
+                        // Set the flag for the next request
+                        $_SESSION['header_redirect_flag'] = false;
+                        echo $_SESSION["fullNameErr"]; ?> </span>
                     </div>
                     <div class="input-box">
                         <span class="details">Username</span>
-                        <input type="text" name="uname" placeholder="Enter your username" required>
-                        <span class="error"><?php echo $usernameErr; ?> </span>
+                        <input type="text" id='uname' name="uname" placeholder="Enter your username" required>
+                        <span class="error" id="usernameErr"><?php echo $_SESSION["usernameErr"]; ?> </span>
                     </div>
                     <div class="input-box">
                         <span class="details">Email</span>
-                        <input type="email" name="email" placeholder="Enter your email" required>
-                        <span class="error"><?php echo $emailErr; ?> </span>
+                        <input type="email" id='email' name="email" placeholder="Enter your email" required>
+                        <span class="error" id="emailErr"><?php echo $_SESSION["emailErr"]; ?> </span>
                     </div>
                     <div class="input-box">
                         <span class="details">Phone Number</span>
-                        <input type="number" name="pno" placeholder="Enter your number" required>
-                        <span class="error"><?php echo $phoneErr; ?> </span>
+                        <input type="number" id='pno' name="pno" placeholder="Enter your number" required>
+                        <span class="error" id="phoneErr"><?php echo $_SESSION["phoneErr"]; ?> </span>
                     </div>
                     <div class="input-box">
                         <span class="details">Password</span>
-                        <input type="password" name="ps1" placeholder="Enter your password" required>
-                        <span class="error"><?php echo $passwordErr; ?> </span>
+                        <input type="password" id='ps1' name="ps1" placeholder="Enter your password" required>
+                        <span class="error" id="passwordErr"><?php echo $_SESSION["passwordErr"]; ?> </span>
                     </div>
                     <div class="input-box">
                         <span class="details">Confirm Password</span>
-                        <input type="password" name="ps2" placeholder="Confirm your password" required>
-                        <span class="error"><?php echo $passwordErr; ?> </span>
-                        <span class="error"><?php echo $passwordMatchErr; ?> </span>
+                        <input type="password" id='ps2' name="ps2" placeholder="Confirm your password" required>
+                        <span class="error" id="passwordErr"><?php echo $_SESSION["passwordErr"]; ?> </span>
+                        <span class="error" id="passwordMatchErr"><?php echo $_SESSION["passwordMatchErr"]; ?> </span>
                     </div>
                 </div>
                 <div class="gender-details">
-                    <input type="radio" name="gender" id="dot-1" value="male">
-                    <input type="radio" name="gender" id="dot-2" value="female">
-                    <input type="radio" name="gender" id="dot-3" value="pn">
+                    <input type="radio" name="gender" id="dot-1" value="male" >
+                    <input type="radio" name="gender" id="dot-2" value="female" >
+                    <input type="radio" name="gender" id="dot-3" value="pn" >
                     <span class="gender-title">Gender</span>
                     <div class="category">
                         <label for="dot-1">
@@ -252,20 +84,19 @@
                             <span class="gender">Prefer not to say</span>
                         </label>
                     </div>
-                    <span class="error"><?php echo $genderErr; ?> </span>
+                    <span class="error" id="genderErr" ><?php echo $_SESSION["genderErr"]; ?> </span>
                 </div>
                 <div>
                     <span><?php
-                        echo $databaseErr;
+                        echo $_SESSION["databaseErr"];
                     ?></span>
                 </div>
                 <div class="button">
-                    <input type="submit" name="submit" value="Register">
+                    <input type="submit" id='submit' name="submit" value="Register">
                 </div>
             </form>
         </div>
     </div>
-    
+    <script src="./register_validate.js"></script>
 </body>
-
 </html>

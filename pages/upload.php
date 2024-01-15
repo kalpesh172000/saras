@@ -7,8 +7,8 @@
             $imgContent = addslashes(file_get_contents($image));
 
             $db_host = 'localhost';
-            $db_user = 'muskan';
-            $db_password = 'saras123';
+            $db_user = 'root';
+            $db_password = '';
             $db_name = 'saras';
 
             $conn = new mysqli($db_host, $db_user, $db_password, $db_name);
@@ -21,10 +21,12 @@
 
             //Insert image content into database
             $insert = $conn->query("INSERT into images (image, created) VALUES ('$imgContent', '$dataTime')");
-            if($insert){
+            if($insert)
+            {
                 echo "File uploaded successfully.";
                 header("Location: main.php");
-            }else{
+            }else 
+            {
                 echo "File upload failed, please try again.";
                 header("Location: upload.php");
             } 
